@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">
+                    <i class="fa-solid fa-users icon"></i>
+                    User Management
+                </h1>
+                <p class="header-subtitle">Modern and professional user management</p>
+            </div>
+        </header>
+
+        <div class="controls-section">
+            <div class="search-wrapper">
+                <span class="search-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search by name, email, username..."
+                >
+            </div>
+
+            <div class="filter-group">
+                <button id="filterBtn" class="filter-btn">
+                    <i class="fa-solid fa-filter"></i>
+                    Filter
+                </button>
+                <button id="addUserBtn" class="add-btn">
+                    <i class="fa-solid fa-plus"></i>
+                Add User
+                </button>
+            </div>
+        </div>
+
+        <div id="filterPanel" class="filter-panel hidden">
+            <div class="filter-content">
+                <h3>
+                    <i class="fa-solid fa-sliders"></i>
+                    Filter by criteria
+                </h3>
+                <div class="filter-options">
+                    <label>
+                        <input type="radio" name="filter" value="all" checked>
+                        <span>All</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="filter" value="website">
+                        <span>Has Website</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="filter" value="phone">
+                        <span>Has Phone</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="activeUsers">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="newUsers">0</div>
+                    <div class="stat-label">New Users</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading data...</p>
+            </div>
+
+            <div id="errorMessage" class="error-message hidden"></div>
+
+            <table id="userTable" class="user-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Website</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Add new User
+                </h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="userForm" class="user-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="userName" name="name" required>
+                        <span class="error-text" id="nameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userUsername">Username <span class="required">*</span></label>
+                        <input type="text" id="userUsername" name="username" required>
+                        <span class="error-text" id="usernameError"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userEmail">Email <span class="required">*</span></label>
+                        <input type="email" id="userEmail" name="email" required>
+                        <span class="error-text" id="emailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPhone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="userPhone" name="phone" required>
+                        <span class="error-text" id="phoneError"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userWebsite">Website</label>
+                    <input type="url" id="userWebsite" name="website">
+                    <span class="error-text" id="websiteError"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelBtn">
+                        <i class="fa-solid fa-ban"></i>
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <i class="fa-solid fa-check"></i>
+                        <span id="submitBtnText">Add User</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Confirm Delete
+                </h2>
+                <button class="close-btn" id="closeDeleteModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="delete-content">
+                <div class="warning-icon">
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <p>Are you sure you want to delete user? <strong id="deleteUserName"></strong>?</p>
+                <p class="warning-text">This action cannot be undone!</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="cancelDeleteBtn">
+                    <i class="fa-solid fa-ban"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn-delete" id="confirmDeleteBtn">
+                    <i class="fa-solid fa-trash"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
